@@ -9,12 +9,25 @@ body {
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: rgb(44, 44, 44);
+    background-image: url("https://kanz116.pythonanywhere.com/viewimage?id=1");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.square {
+    height: 75px;
+    width: 75px;
+}
+
+.imagecontainer {
+    display: flex;
+    flex-direction: column;
 }
 
 #containerchat {
-    width: 1500px;
-    height: 650px;
+    width: 970px;
+    height: 400px;
     background-color: rgb(41, 41, 41);
     border-style: solid;
     border-left-width: 7px;
@@ -29,10 +42,25 @@ body {
     border-radius: 10px;
 }
 
+.file-upload {
+            display: none;
+        }
+
+.custom-button {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    cursor: pointer;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .jisojiso {
     display: flex;
     flex-direction: row;
-    width: 1527px;
+    width: 997px;
 }
 
 #buatnulis {
@@ -52,8 +80,8 @@ body {
 }
 
 #containerfriend {
-    width: 200px;
-    height: 690px;
+    width: 180px;
+    height: 440px;
     margin-right: 50px;
     background-color: rgb(41, 41, 41);
     border-style: solid;
@@ -69,6 +97,42 @@ body {
     border-radius: 10px;
 }
 
+#containerfriend>button {
+    background-color: rgb(41, 41, 41);
+    color: white;
+    margin-bottom: 5px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-color: rgb(255, 255, 255);
+}
+
+#containerfriend>div {
+    display: flex;
+    flex-direction: column;
+}
+
+#containerfriend>div>button {
+    background-color: rgb(41, 41, 41);
+    color: white;
+    border-right-width: 2px;
+    border-left-width: 2px;
+    border-color: rgb(255, 255, 255);
+}
+
+#addcon {
+    margin-bottom: 5px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+}
+
+#remcon {
+    margin-bottom: 20px;
+    border-top-width: 0px;
+    border-bottom-width: 2px;
+}
+
 .wrapper {
     margin-top: 50px;
     display: flex;
@@ -81,7 +145,6 @@ body {
 }
 
 #thecon>div {
-    color:white;
     font-weight: 500;
     font-size: 17px;
 }
@@ -97,21 +160,21 @@ body {
 }
 
 /* width */
-::-webkit-scrollbar {
+/*::-webkit-scrollbar {
   width: 10px;
 }
 
 /* Track */
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
 
-/* Handle */
+/* Handle 
 ::-webkit-scrollbar-thumb {
   background: #888;
 }
 
-/* Handle on hover */
+/* Handle on hover 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }

@@ -263,6 +263,7 @@ document.getElementById("modeoption").addEventListener("change", () =>{
 document.getElementById('fileUpload').addEventListener('change', function () {
             let fileName = this.files[0] ? this.files[0].name : 'No file chosen';
             document.getElementById('fileName').textContent = 'Selected file: ' + fileName;
+            document.getElementById("buatnulis").value = "Selected file: viewimage.png"
         });
 
 function getImageBytesFromFile(file) {
@@ -367,7 +368,7 @@ fetch(apiUrl, requestOptions)
 
 
 document.getElementById("addcon").addEventListener("click", () => {
-    let = inputancontact = prompt("username: ")
+    let = inputancontact = prompt("username to add: ")
     if (inputancontact != "" && inputancontact != null){
         const apiUrl = 'https://essa116.pythonanywhere.com/addcontact';
         const data = {
@@ -399,7 +400,7 @@ document.getElementById("addcon").addEventListener("click", () => {
 })
 
 document.getElementById("remcon").addEventListener("click", () => {
-    let = inputancontact = prompt("username: ")
+    let = inputancontact = prompt("username to remove: ")
     if (inputancontact != "" && inputancontact != null){
         const apiUrl = 'https://essa116.pythonanywhere.com/removecontact';
         const data = {
@@ -430,6 +431,15 @@ document.getElementById("remcon").addEventListener("click", () => {
 }
 })
 
+function resetcolor(){
+  let elemetss = document.querySelectorAll(".contacts")
+  for (let i = 0; i < elemetss.length; i++){
+    elemetss[i].style.color = "black"
+    elemetss[i].style.backgroundColor = "white"
+    elemetss[i].style = '.contacts:hover', 'background: rgb(180, 180, 180);'
+  }
+}
+
 fetch(`https://essa116.pythonanywhere.com/get/user/username=${getlocalstorage("username")}`, {method: "GET"})
     .then(response => response.json())
     .then(data => {
@@ -438,7 +448,11 @@ fetch(`https://essa116.pythonanywhere.com/get/user/username=${getlocalstorage("u
             const mynewel = document.createElement("button")
             mynewel.textContent = `${data.friends[i]} (not checked)`
             mynewel.id = data.friends[i]
+            mynewel.className = "contacts"
             mynewel.addEventListener("click", () => {
+              resetcolor()
+               mynewel.style.backgroundColor = "rgba(77, 77, 77, 1)"
+               mynewel.style.color = "white"
                 document.getElementById("buatnulis").placeholder = "write text to " + data.friends[i]
                 selectedorang = data.friends[i]
             })
@@ -467,7 +481,7 @@ setInterval(() => {
         let peoplengomong = []
         let timess = []
         for (let i = 0; i < data.length; i ++){
-          if (data[i][2] == selectedorang){
+          if ((data[0][1] == selectedorang) || (data[0][2] == selectedorang)){
             if (!mymessagessid.includes(data[i][0])){
                 mymessagessid.push(data[i][0])
                 peoplengomong.push(data[i][3])

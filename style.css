@@ -5,7 +5,7 @@ body {
 
 .container {
     width: 100%;
-    height: 100vh;
+    height: 93vh;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -98,8 +98,8 @@ body {
 }
 
 #containerfriend>button {
-    background-color: rgb(41, 41, 41);
-    color: white;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     margin-bottom: 5px;
     border-top-width: 0px;
     border-bottom-width: 0px;
@@ -108,14 +108,23 @@ body {
     border-color: rgb(255, 255, 255);
 }
 
+#containerfriend>button:hover {
+    background-color: rgb(180, 180, 180);
+}
+
+#containerfriend>div>button:hover {
+    background-color: rgb(180, 180, 180);
+}
+
+
 #containerfriend>div {
     display: flex;
     flex-direction: column;
 }
 
 #containerfriend>div>button {
-    background-color: rgb(41, 41, 41);
-    color: white;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     border-right-width: 2px;
     border-left-width: 2px;
     border-color: rgb(255, 255, 255);
@@ -153,6 +162,11 @@ body {
     display: flex;
     padding: 15px;
     background-color: rgb(47, 144, 255);
+}
+
+#namaa {
+    margin-left: 5px;
+    margin-right: 10px;
 }
 
 #divapainiya {

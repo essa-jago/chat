@@ -263,7 +263,7 @@ document.getElementById("modeoption").addEventListener("change", () =>{
 document.getElementById('fileUpload').addEventListener('change', function () {
             let fileName = this.files[0] ? this.files[0].name : 'No file chosen';
             document.getElementById('fileName').textContent = 'Selected file: ' + fileName;
-            document.getElementById("buatnulis").value = "Selected file: viewimage.png"
+            document.getElementById("buatnulis").value = "Selected file: " + fileName;
         });
 
 function getImageBytesFromFile(file) {

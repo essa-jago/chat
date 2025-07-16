@@ -144,7 +144,7 @@ document.getElementById("chating").addEventListener("click", () => {
               opponent: selectedorang,
               message: document.getElementById("buatnulis").value,
             };
-            
+            document.getElementById("buatnulis").value = ""
             const requestOptions = {
               method: 'POST',
               headers: {
@@ -157,7 +157,6 @@ document.getElementById("chating").addEventListener("click", () => {
               .then(response => {
               })
               .then(data => {
-                document.getElementById("buatnulis").value = ""
               })
               .catch(error => {
                 console.error
@@ -182,7 +181,7 @@ document.getElementById("buatnulis").addEventListener("keyup", (e) => {
               opponent: selectedorang,
               message: document.getElementById("buatnulis").value,
             };
-            
+            document.getElementById("buatnulis").value = ""
             const requestOptions = {
               method: 'POST',
               headers: {
@@ -195,7 +194,6 @@ document.getElementById("buatnulis").addEventListener("keyup", (e) => {
               .then(response => {
               })
               .then(data => {
-                document.getElementById("buatnulis").value = ""
               })
               .catch(error => {
                 console.error
@@ -525,9 +523,12 @@ setInterval(() => {
             if (document.getElementById("modeoption").value == "light mode"){
               mycolor = "black"
             }*/
+            neweltoolololol.style = "word-wrap: break-word;"
             neweltoolololol.style.color = mycolor
             newelmy.append(neweltoolololol)
             document.getElementById("containerchat").append(newelmy)
+            let mycontainer = document.getElementById("containerchat")
+            mycontainer.scrollTop = mycontainer.scrollHeight
           }
         }
         

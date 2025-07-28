@@ -305,7 +305,8 @@ const data = {
 const requestOptions = {
   method: 'POST',
   headers: {
-    'Content-Type': 'image/png',
+    'Content-Type': file.type,
+    'filename': file.name
   },
   body: imageBytes,
 };
@@ -465,12 +466,19 @@ let orangmessagesids = []
 let orangmessagess = []
 let lastedselectedorang = ""
 let newelmy = document.getElementById("thecon")
+let controller = new AbortController();
+
+async function abortcontrol(){
+  controller.abort()
+  controller = new AbortController();
+}
 setInterval(() => {
     if (selectedorang != ""){
         if (lastedselectedorang != selectedorang){
             document.getElementById("thecon").innerHTML = ""
             mymessagessid = []
             lastedselectedorang = selectedorang
+            abortcontrol()
         }
     fetch(`https://essa116.pythonanywhere.com/get/chat/username=${getlocalstorage("username")}&opponent=${selectedorang}`, {method: "GET"})
     .then(response => response.json())
@@ -494,7 +502,6 @@ setInterval(() => {
         }
         for(let i = 0; i < realtimechat.length; i++){
           if (chatss[i].includes("viewimage?id=")){
-            const img = document.createElement("img")
             let numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
             let therealid = ""
             for (let iu = 0; iu < chatss[i].length; iu ++){
@@ -507,10 +514,76 @@ setInterval(() => {
             const neweltoolololol = document.createElement("div")
             neweltoolololol.textContent = `${peoplengomong[i]} (${timess[i]}) : `
             neweltoolololol.style.color = "white"
-            img.src = `https://kanz116.pythonanywhere.com/viewimage?id=${therealid}`
-            img.className = "square"
             newelcontainerofall.append(neweltoolololol)
-            newelcontainerofall.append(img)
+            let img
+            let felnem
+            const signal = controller.signal;
+            fetch(`https://kanz116.pythonanywhere.com/viewimage?id=${therealid}`, { signal: signal })
+            /*.then(response => {
+              let heder = response.headers.get('content-type')
+              if (heder.split("/")[0] == "image"){
+                //const dataUrl = `data:image/png;base64,${base64String}`;
+                //img.src = response
+              }
+            })*/
+            .then(response => {
+              const contentType = response.headers.get('Content-Type');
+              console.log(contentType.split("/")[0])
+              if (contentType.split("/")[0] == "image"){
+                img = document.createElement("img")
+                img.className = "square"
+                newelcontainerofall.append(img)
+                return response.blob()
+              }else if (contentType.split("/")[0] == "video"){
+                img = document.createElement("video")
+                img.className = "square"
+                img.controls = "true"
+                newelcontainerofall.append(img)
+                return response.blob()
+              }else if (contentType.split("/")[0] == "audio"){
+                img = document.createElement("audio")
+                img.className = "square"
+                img.controls = "true"
+                newelcontainerofall.append(img)
+                return response.blob()
+              }else {
+                img = document.createElement("div")
+                img.className = "square"
+                newelcontainerofall.append(img)
+                return response.json()
+              }
+            })
+            .then(blob => {
+                // Handle the blob, e.g., create an object URL for an image
+                //console.log(contentType)
+                try {
+                  let blobbb = blob["filename"]
+                  if (blobbb == null){
+                    const imageUrl = URL.createObjectURL(blob);
+                    img.src = imageUrl
+                    img.className = "square"
+                  }else {
+                  felnem = document.createElement("div")
+                  let donlodbuton = document.createElement("button")
+                  donlodbuton.textContent = "download"
+                  donlodbuton.addEventListener("click", () => {
+                    window.open(`https://kanz116.pythonanywhere.com/download?id=${therealid}`, '_blank');
+                  })
+                  felnem.textContent = blobbb
+                  felnem.style.color = "rgb(47, 144, 255)"
+                  img.append(felnem)
+                  img.append(donlodbuton)
+                  console.log(blob["filename"])
+                  }
+                }catch {
+                  const imageUrl = URL.createObjectURL(blob);
+                  img.src = imageUrl
+                }
+            })
+
+    // Get a specific header value
+            .catch(error => console.error(error));
+            //img.src = `https://kanz116.pythonanywhere.com/viewimage?id=${therealid}`
             newelmy.append(newelcontainerofall)
             document.getElementById("containerchat").append(newelmy)
           }else{
@@ -535,7 +608,7 @@ setInterval(() => {
     })
     .catch(error => console.error(error));
     }
-}, 100);
+}, 500);
 
 let lastedselecteduser = selectedorang
 

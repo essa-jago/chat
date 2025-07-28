@@ -142,6 +142,11 @@ body {
     border-bottom-width: 2px;
 }
 
+.square2 {
+    height: 300px;
+    width: 300px;
+}
+
 .wrapper {
     margin-top: 50px;
     display: flex;

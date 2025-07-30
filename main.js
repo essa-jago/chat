@@ -30,11 +30,13 @@ fetch(apiUrl, requestOptions)
   });
 */
 
-
+let mediaRecorder;
+let audioChunks = [];
+let uint8ArrayAUDIO = null
 
 let selectedorang = ""
 let mycontact = []
-
+let isrecorder = false
 
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();
@@ -135,6 +137,8 @@ document.getElementById("chating").addEventListener("click", () => {
     if (selectedorang != ""){
           if( document.getElementById("fileUpload").files.length != 0 ){
             uploadimage()
+          }else if (uint8ArrayAUDIO != null && isrecorder == true) {
+            uploadimage()
           }else {
             if (document.getElementById("buatnulis").value != ""){
             const apiUrl = 'https://essa116.pythonanywhere.com/post/chat';
@@ -171,6 +175,8 @@ document.getElementById("buatnulis").addEventListener("keyup", (e) => {
     if (selectedorang != ""){
       if (e.keyCode == 13){
           if( document.getElementById("fileUpload").files.length != 0 ){
+            uploadimage()
+          }else if (uint8ArrayAUDIO != null && isrecorder == true) {
             uploadimage()
           }else {
             if (document.getElementById("buatnulis").value != ""){
@@ -291,18 +297,34 @@ document.getElementById('fileUpload').addEventListener('change', async (event) =
 });
 
 async function uploadimage() {
- if (file) {
     try {
-      const imageBytes = await getImageBytesFromFile(file);
-      const apiUrl = 'https://kanz116.pythonanywhere.com/image';
+      let imageBytes
+      if (uint8ArrayAUDIO == null){
+      imageBytes = await getImageBytesFromFile(file);
       document.getElementById('fileUpload').value=''
       document.getElementById("fileName").textContent = "loading..."
+      }
+      const apiUrl = 'https://kanz116.pythonanywhere.com/image';
 const data = {
   name: 'John Doe',
   email: 'johndoe@example.com',
 };
 
-const requestOptions = {
+let requestOptions
+
+if (uint8ArrayAUDIO != null){
+requestOptions = {
+  method: 'POST',
+  headers: {
+    'Content-Type': "audio/mp3",
+    'filename': "recorded.mp3"
+  },
+  body: uint8ArrayAUDIO,
+};
+isrecorder = false
+document.getElementById("recordbutton").textContent = "loading..."
+}else {
+  requestOptions = {
   method: 'POST',
   headers: {
     'Content-Type': file.type,
@@ -310,6 +332,7 @@ const requestOptions = {
   },
   body: imageBytes,
 };
+}
 
 fetch(apiUrl, requestOptions)
   .then(response => {
@@ -342,9 +365,12 @@ fetch(apiUrl, requestOptions)
               .then(response => {
               })
               .then(data => {
+                uint8ArrayAUDIO = null
+                audioChunks = []
                 document.getElementById("buatnulis").value = ""
                 document.getElementById('fileUpload').value=''
                 document.getElementById("fileName").textContent = "Choose FIle"
+                document.getElementById("recordbutton").textContent = "start recording"
               })
               .catch(error => {
                 console.error
@@ -362,7 +388,7 @@ fetch(apiUrl, requestOptions)
       console.error('Error reading image file:', error);
     }
   }
-}
+
 
 
 
@@ -396,6 +422,56 @@ document.getElementById("addcon").addEventListener("click", () => {
         ('Error:', error);
           });
 }
+})
+
+let recordding = "start"
+
+async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+
+    mediaRecorder.ondataavailable = (event) => {
+      audioChunks.push(event.data); // Collect audio data blobs
+    };
+
+    mediaRecorder.onstop = async () => {
+      // This will be called when recording stops
+      const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' }); // Or 'audio/wav' etc.
+      const arrayBuffer = await audioBlob.arrayBuffer(); // Convert Blob to ArrayBuffer
+      uint8ArrayAUDIO = new Uint8Array(arrayBuffer); // Create Uint8Array from ArrayBuffer
+
+      console.log('Recorded audio as Uint8Array:', uint8ArrayAUDIO);
+      document.getElementById("buatnulis").value = "recorded.mp3"
+      // You can now send this uint8Array to a server, process it further, etc.
+      isrecorder = true
+    };
+
+    mediaRecorder.start();
+    console.log('Recording started...');
+  } catch (err) {
+    console.error('Error accessing microphone:', err);
+    alert('Error accessing microphone. Please ensure you have granted permission.');
+  }
+}
+
+function stopRecording() {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
+    console.log('Recording stopped.');
+  }
+}
+
+document.getElementById("recordbutton").addEventListener("click", () => {
+  if (recordding == "start") {
+    document.getElementById("recordbutton").textContent = "stop recording"
+    startRecording()
+    recordding = "stop"
+  }else {
+    document.getElementById("recordbutton").textContent = "start recording"
+    stopRecording()
+    recordding = "start"
+  }
 })
 
 document.getElementById("remcon").addEventListener("click", () => {

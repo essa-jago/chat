@@ -288,7 +288,7 @@ function getImageBytesFromFile(file) {
   });
 }
 
-// Example usage with an HTML file input:
+// Example usage with an HTML file input: inputer
 //
 let file
 

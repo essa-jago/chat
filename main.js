@@ -594,7 +594,7 @@ setInterval(() => {
             let img
             let felnem
             const signal = controller.signal;
-            fetch(`https://kanz116.pythonanywhere.com/viewimage?id=${therealid}`, { signal: signal })
+            fetch(`https://kanz116.pythonanywhere.com/viewdata?id=${therealid}`, { signal: signal })
             /*.then(response => {
               let heder = response.headers.get('content-type')
               if (heder.split("/")[0] == "image"){
@@ -603,60 +603,45 @@ setInterval(() => {
               }
             })*/
             .then(response => {
-              const contentType = response.headers.get('Content-Type');
+              return response.json();
+            })
+            .then(data => {
+              const contentType = data["Content-Type"]
               console.log(contentType.split("/")[0])
               if (contentType.split("/")[0] == "image"){
                 img = document.createElement("img")
                 img.className = "square"
                 newelcontainerofall.append(img)
-                return response.blob()
+                img.src = `https://kanz116.pythonanywhere.com/viewimage?id=${therealid}`
               }else if (contentType.split("/")[0] == "video"){
                 img = document.createElement("video")
                 img.className = "square"
                 img.controls = "true"
                 newelcontainerofall.append(img)
-                return response.blob()
+                img.src = `https://kanz116.pythonanywhere.com/viewimage?id=${therealid}`
               }else if (contentType.split("/")[0] == "audio"){
                 img = document.createElement("audio")
                 img.className = "square"
                 img.controls = "true"
                 newelcontainerofall.append(img)
-                return response.blob()
+                img.src = `https://kanz116.pythonanywhere.com/viewimage?id=${therealid}`
               }else {
                 img = document.createElement("div")
                 img.className = "square"
                 newelcontainerofall.append(img)
-                return response.json()
-              }
-            })
-            .then(blob => {
-                // Handle the blob, e.g., create an object URL for an image
-                //console.log(contentType)
-                try {
-                  let blobbb = blob["filename"]
-                  if (blobbb == null){
-                    const imageUrl = URL.createObjectURL(blob);
-                    img.src = imageUrl
-                    img.className = "square"
-                  }else {
-                  felnem = document.createElement("div")
+                felnem = document.createElement("div")
                   let donlodbuton = document.createElement("button")
                   donlodbuton.textContent = "download"
                   donlodbuton.addEventListener("click", () => {
                     window.open(`https://kanz116.pythonanywhere.com/download?id=${therealid}`, '_blank');
                   })
-                  felnem.textContent = blobbb
+                  
                   felnem.style.color = "rgb(47, 144, 255)"
+                  felnem.textContent = data["filename"]
                   img.append(felnem)
                   img.append(donlodbuton)
-                  console.log(blob["filename"])
-                  }
-                }catch {
-                  const imageUrl = URL.createObjectURL(blob);
-                  img.src = imageUrl
-                }
+              }
             })
-
     // Get a specific header value
             .catch(error => console.error(error));
             //img.src = `https://kanz116.pythonanywhere.com/viewimage?id=${therealid}`

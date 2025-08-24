@@ -133,6 +133,12 @@ const apiUrl = 'https://essa116.pythonanywhere.com/post/chat';
               });
 */
 
+if (window.localStorage.getItem("background") == null || window.localStorage.getItem("background").length == 0){
+  document.querySelector(".container").style.backgroundImage = "url('https://kanz116.pythonanywhere.com/viewimage?id=1')"
+}else {
+  document.querySelector(".container").style.backgroundImage = `url('https://kanz116.pythonanywhere.com/viewimage?id=${window.localStorage.getItem("background")}')`
+}
+
 document.getElementById("chating").addEventListener("click", () => {
     if (selectedorang != ""){
           if( document.getElementById("fileUpload").files.length != 0 ){
@@ -295,6 +301,53 @@ let file
 document.getElementById('fileUpload').addEventListener('change', async (event) => {
   file = event.target.files[0];
 });
+
+document.getElementById('bgchanger').addEventListener('change', async (event) => {
+  let filee = event.target.files[0];
+  backgroounduplload(filee)
+});
+
+async function backgroounduplload(myfile){
+  try {
+    document.getElementById("bgname").textContent = "loading..."
+    let imgbyte
+    imgbyte = await getImageBytesFromFile(myfile);
+    const apiUrl = 'https://kanz116.pythonanywhere.com/image';
+    let requestOptions
+    requestOptions = {
+  method: 'POST',
+  headers: {
+    'Content-Type': myfile.type,
+    'filename': myfile.name
+  },
+  body: imgbyte,
+};
+fetch(apiUrl, requestOptions)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log(data)
+    console.log(`https://kanz116.pythonanywhere.com/viewimage?id=${data["id"]}`)
+    setlocalstorage("background", data["id"])
+    document.getElementById("bgname").textContent = "change background"
+    document.location.reload()
+  })
+  .catch(error => {
+    console.error
+
+('Error:', error);
+document.getElementById("bgname").textContent = "change background"
+  });
+      console.log('Image bytes:', imgbyte);
+    } catch (error) {
+      console.error('Error reading image file:', error);
+    
+  }
+}
 
 async function uploadimage() {
     try {

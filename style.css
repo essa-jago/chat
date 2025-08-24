@@ -9,7 +9,6 @@ body {
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-image: url("https://kanz116.pythonanywhere.com/viewimage?id=1");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -176,6 +175,10 @@ body {
 
 #divapainiya {
     width: 100px;
+}
+
+#bgname {
+    margin-left: 30px;
 }
 
 /* width */
